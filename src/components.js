@@ -34,3 +34,9 @@ Crafty.c('Player', {
 		});
 	}
 });
+
+Crafty.c('Bullet', {
+	init: function() {
+		
+	}
+});
