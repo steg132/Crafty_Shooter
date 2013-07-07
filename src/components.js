@@ -23,7 +23,7 @@ Crafty.c('Player', {
 	isFiring: false,
 	init: function() {
 		this.requires('Actor, Twoway, Image, Delay')
-		.attr({w:64, h:52})
+		.attr({w:23, h:22})
 		.image('assets/spaceship1.png')
 		// Two way movement w/o jump
 		.twoway(5, 0)

@@ -1,0 +1,7 @@
+# sources.txt
+
+Spaceships:
+http://opengameart.org/content/spaceship-set-4-pixel-art-space-ships
+
+Bullets:
+http://opengameart.org/content/sci-fi-space-simple-bullets
