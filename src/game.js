@@ -1,6 +1,6 @@
 Game = {
 	width: 	function() { return 450; },
-	height: function() { return 800; },
+	height: function() { return 700; },
 	player: null,
 	start: 	function(){
 		//Init crafty
@@ -13,6 +13,6 @@ Game = {
 			spr_blt2: [2, 0]
 		});
 		// add the player object to the game
-		this.player = Crafty.e('Player').at(Game.width() / 2, Game.height() - 100);
+		this.player = Crafty.e('Player').at(Game.width() / 2, Game.height() - 50);
 	}
 }
