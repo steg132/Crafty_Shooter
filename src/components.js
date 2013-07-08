@@ -85,7 +85,21 @@ Crafty.c('Projectile', {
 
 Crafty.c('Bullet', {
 	init: function() {
-		this.requires("Actor, Projectile, spr_blt0")
+		this.requires("Projectile, spr_blt0")
 		.attr({w:39, h:39});
+	}
+});
+
+Crafty.c('Enemy', {
+	init: function() {
+		this.requires("Actor, Image, Projectile")
+		.attr({w:36, h:29})
+		.image('assets/spaceship2.png')
+		.bind("EnterFrame", function() {
+			// check f we are beyond the end of the screen
+			if ( this.y > Game.height() + this.h) 
+				this.destroy();
+
+		});
 	}
 });
