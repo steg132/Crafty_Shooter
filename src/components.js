@@ -85,21 +85,43 @@ Crafty.c('Projectile', {
 
 Crafty.c('Bullet', {
 	init: function() {
-		this.requires("Projectile, spr_blt0")
-		.attr({w:39, h:39});
+		this.requires("Projectile, Collision, spr_blt0, Destructable")
+		.attr({w:39, h:39})
+		.collision([0, 0], [this.w, 0], [this.w, this.h], [0, this.h])
+		// check collision with bullet
+		.onHit("Enemy", function(){
+			// die when you are hit!!!
+			this.isDestroyed = true;
+		});
 	}
 });
 
 Crafty.c('Enemy', {
 	init: function() {
-		this.requires("Actor, Image, Projectile")
+		this.requires("Actor, Image, Projectile, Collision, Destructable")
 		.attr({w:36, h:29})
 		.image('assets/spaceship2.png')
+		.collision([0, 0], [this.w, 0], [this.w, this.h], [0, this.h])
 		.bind("EnterFrame", function() {
 			// check f we are beyond the end of the screen
 			if ( this.y > Game.height() + this.h) 
 				this.destroy();
+		})
+		// check collision with bullet
+		.onHit("Bullet", function(){
+			// die when you are hit!!!
+			this.isDestroyed = true;
+		});
+	}
+});
 
+Crafty.c("Destructable", {
+	isDestroyed: false,
+	init: function() {
+		this.requires('Actor')
+		.bind("EnterFrame", function () {
+			if( this.isDestroyed == true)
+				this.destroy();
 		});
 	}
 });

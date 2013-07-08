@@ -22,6 +22,6 @@ Game = {
 	},
 	spawnEnemy: function() {
 		Crafty.e('Enemy').at(Math.random() * Game.width(), -15)
-		.attr({velocity:{x:0, y:(Math.random() % 10)}});
+		.attr({velocity:{x:0, y:(Math.random() * 8) + 1}});
 	}
 }
