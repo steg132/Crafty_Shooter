@@ -17,11 +17,14 @@ Game = {
 		this.player = Crafty.e('Player').at(Game.width() / 2, Game.height() - 50);
 
 		// Create Spawn Interval
-		spawnIntervalID = window.setInterval(this.spawnEnemy, 500);
+		spawnIntervalID = window.setInterval(function() {
+			if ( Crafty.isPaused() != false)
+				Game.spawnEnemy();
+		}, 500);
 
 	},
 	spawnEnemy: function() {
 		Crafty.e('Enemy').at(Math.random() * Game.width(), -15)
-		.attr({velocity:{x:0, y:(Math.random() * 8) + 1}});
+		.velocity(0, (Math.random() * 8) + 1);
 	}
 }
