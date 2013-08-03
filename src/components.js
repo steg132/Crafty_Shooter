@@ -21,6 +21,7 @@ Crafty.c('Actor', {
 
 Crafty.c('Player', {
 	isFiring: false,
+	lastFire:0,
 	fireIntervalID: null,
 	init: function() {
 		this.requires('Actor, Twoway, Image, Delay')
@@ -43,8 +44,9 @@ Crafty.c('Player', {
 			if(e.key == Crafty.keys['SPACE']) {
 				// start Firing
 				this.isFiring = true;
+				this.lastFire = 0;
 				// start a delay
-				this.fire();
+				//this.fire();
 			}
 		})
 		.bind('KeyUp', function(e) {
@@ -55,6 +57,16 @@ Crafty.c('Player', {
 		})
 		// Update player every frame
 		.bind('EnterFrame', function() {
+			// check if it is time to fire a bullet
+			if ( this.isFiring == true ) {
+				if ( this.lastFire == 0 ) {
+					this.fire();
+					this.lastFire = new Date().getTime();
+				} else if (this.lastFire + Config.player.fireRate < new Date().getTime() ) {
+					this.fire();
+					this.lastFire = new Date().getTime();
+				}
+			}
 		});
 	},
 	fire: function() {
@@ -112,9 +124,12 @@ Crafty.c('Velocity', {
 
 Crafty.c('Bullet', {
 	init: function() {
+		var col = Config.bullets[0].collision;
 		this.requires("Velocity, Collision, Destructable")
-		.attr({w:39, h:39})
-		.collision([0, 0], [this.w, 0], [this.w, this.h], [0, this.h])
+		.attr({w:Config.bullets[0].w, h:Config.bullets[0].h})
+//		.collision(new Crafty.polygon(col[0], col[1], col[2], col[3]))
+		.collision(col[0].slice(0), col[1].slice(0), 
+			col[2].slice(0), col[3].slice(0))
 		// check collision with bullet
 		.onHit("Enemy", function(){
 			// die when you are hit!!!
@@ -131,9 +146,6 @@ Crafty.c('Bullet', {
 Crafty.c('Enemy', {
 	init: function() {
 		this.requires("Actor, Image, Velocity, Collision, Destructable")
-		.attr({w:36, h:29})
-		.image('assets/spaceship2.png')
-		.collision([0, 0], [this.w, 0], [this.w, this.h], [0, this.h])
 		.bind("EnterFrame", function() {
 			// check f we are beyond the end of the screen
 			if ( this.y > Game.height() + this.h) 
@@ -144,6 +156,13 @@ Crafty.c('Enemy', {
 			// die when you are hit!!!
 			this.isDestroyed = true;
 		});
+	},
+	config: function(config) {
+		this.w = config.w;
+		this.h = config.h;
+		this.image(config.image);
+		this.collision([0, 0], [this.w, 0], [this.w, this.h], [0, this.h]);
+		return this;
 	}
 });
 

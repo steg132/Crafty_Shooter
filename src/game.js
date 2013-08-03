@@ -24,7 +24,19 @@ Game = {
 
 	},
 	spawnEnemy: function() {
-		Crafty.e('Enemy').at(Math.random() * Game.width(), -15)
+		var enemy = Config.enemies[Math.floor(
+			Math.random()*Config.enemies.length)];
+
+		var newEnemy = Crafty.e('Enemy')
+		.config(enemy)
+		.at(Math.random() * Game.width(), -15)
 		.velocity(0, (Math.random() * 8) + 1);
+		//.collision(new Crafty.polygon(enemy.collision))
+//		.image(enemy.image);
+
+		newEnemy.collision().w = enemy.w;
+		newEnemy.collision().h = enemy.h;
+
+		console.log( "New Enemy!" );
 	}
 }
