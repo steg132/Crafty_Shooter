@@ -1,5 +1,10 @@
 <html>
 <head>
+	<style> 
+		body {
+			background: gray;
+		}
+	</style>
 	<title>Crafty Shooter</title>
 	<!-- Load JavaScript	-->	
 	<script type="text/javascript" src="lib/crafty.js"></script>
@@ -16,7 +21,14 @@
 	    key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
     	var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
     	return match && decodeURIComponent(match[1].replace(/\+/g, " "));
-	}
+		}
+		// center canvas
+		function centerCanvas(xPosFromCenter, yPosFromCenter){
+			element = $('#cr-stage');
+			var xPos = parseInt(element.parent().css('width'))/2 -parseInt(element.css('width'))/2 - xPosFromCenter;
+			element.css({left:xPos});
+		}
+
   </script>
 
 </head>
