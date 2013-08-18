@@ -7,6 +7,7 @@ Config = {
 		w: 23,
 		h: 22,
 		image: 'assets/spaceship1.png',
+		collision: [[0, 0], [0, 36], [29, 36], [29, 0]],
 		fireRate: 250
 	},
 	enemies: [

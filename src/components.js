@@ -24,11 +24,21 @@ Crafty.c('Player', {
 	lastFire:0,
 	fireIntervalID: null,
 	init: function() {
-		this.requires('Actor, Twoway, Image, Delay')
+		var col = Config.player.collision;
+		this.requires('Actor, Twoway, Collision, Image, Delay')
 		.attr({w:Config.player.w, h:Config.player.h})
 		.image(Config.player.image)
 		// Two way movement w/o jump
 		.twoway(Config.player.speed, 0)
+		// Add collission to the class
+		.collision(col[0].slice(0), col[1].slice(0), 
+			col[2].slice(0), col[3].slice(0))
+		// check collision with bullet
+		.onHit("Enemy", function(){
+			// die when you are hit!!!
+			Game.PlayerDied();
+		})
+
 
 		// Bind Events
 		// Check when the player moved
@@ -148,13 +158,22 @@ Crafty.c('Enemy', {
 		this.requires("Actor, Image, Velocity, Collision, Destructable")
 		.bind("EnterFrame", function() {
 			// check f we are beyond the end of the screen
-			if ( this.y > Game.height() + this.h) 
+			if ( this.y > Game.height() + this.h) {
 				this.destroy();
+				// remove the enemy
+				var index = Game.enemies.indexOf(this);
+				Game.enemies.splice(index, 1);
+			}
+
 		})
 		// check collision with bullet
 		.onHit("Bullet", function(){
 			// die when you are hit!!!
 			this.isDestroyed = true;
+			// remove the enemy
+			var index = Game.enemies.indexOf(this);
+			Game.enemies.splice(index, 1);
+
 		});
 	},
 	config: function(config) {

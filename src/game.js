@@ -1,9 +1,10 @@
 Game = {
 	width: 	function() { return 450; },
 	height: function() { return 700; },
+	enemies: [],
 	player: null,
 	spawnIntervalID: null,
-	start: 	function(){
+	Init: 	function(){
 		//Init crafty
 		Crafty.init(Game.width(), Game.height());
 		Crafty.background('black');
@@ -13,15 +14,7 @@ Game = {
 			spr_blt1: [1, 0],
 			spr_blt2: [2, 0]
 		});
-		// add the player object to the game
-		this.player = Crafty.e('Player').at(Game.width() / 2, Game.height() - 50);
-
-		// Create Spawn Interval
-		spawnIntervalID = window.setInterval(function() {
-			if ( Crafty.isPaused() != false)
-				Game.spawnEnemy();
-		}, 500);
-
+		this.StartGame();
 	},
 	spawnEnemy: function() {
 		var enemy = Config.enemies[Math.floor(
@@ -37,6 +30,38 @@ Game = {
 		newEnemy.collision().w = enemy.w;
 		newEnemy.collision().h = enemy.h;
 
+		// Add the new enemy! 
+		Game.enemies.push(newEnemy);
+
+
 		console.log( "New Enemy!" );
+	},
+	StartGame: function() {		
+		// add the player object to the game
+		this.player = Crafty.e('Player').at(Game.width() / 2, Game.height() - 50);
+
+		// Create Spawn Interval
+		this.spawnIntervalID = window.setInterval(function() {
+			if ( Crafty.isPaused() != false)
+				Game.spawnEnemy();
+		}, 500);
+	},
+	PlayerDied: function() {
+		// this method is called when the player has died
+		// clear all the enemies from the screen
+		for (var i=0; i<this.enemies.length;i++) {
+			this.enemies[i].destroy();
+		}
+		// destroy the player
+		this.player.destroy();
+		this.player = null;
+
+		// clear the enemy spawn interval
+		window.clearInterval(this.spawnIntervalID);
+		this.spawnIntervalID = null;
+
+		// Let the games begin!!!
+		this.StartGame();
+
 	}
 }
